@@ -12,6 +12,7 @@ import { getWebsocket } from '@/layouts/GlobalWebSocket';
 import Service from '@/pages/account/notification/service';
 import encodeQueryParam from '@/utils/encodeParam';
 import { router } from 'umi';
+import { throttleTime, } from 'rxjs/operators';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
   notices?: NoticeItem[];
@@ -22,34 +23,46 @@ export interface GlobalHeaderRightProps extends ConnectProps {
 }
 interface State {
   noticeList: any[];
+  loading: boolean;
 }
 class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
 
   state: State = {
     noticeList: [],
+    loading: false,
   }
+
+
+
   service = new Service('notifications');
   private ws: any;
-  componentDidMount() {
+  getNotice = () => {
     const { dispatch } = this.props;
     if (dispatch) {
       dispatch({
         type: 'global/fetchNotices',
         payload: encodeQueryParam({
-          // terms: { state: 'unread' }
+          terms: { state: 'unread' }
         })
       });
     }
+  }
+  componentDidMount() {
+    this.getNotice();
     this.ws = getWebsocket(
       `notification`,
       `/notifications`,
       {}
+    ).pipe(
+      throttleTime(2000),
     ).subscribe(
       (resp: any) => {
+        this.getNotice();
         notification.open({
           message: resp?.payload?.topicName,
           description: resp?.payload?.message,
           key: resp.payload.id,
+          top: 60,
           btn: <Button
             type="primary"
             onClick={() => {
@@ -57,6 +70,7 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
                 .read(resp.payload.id)
                 .subscribe(() => {
                   notification.close(resp.payload.id)
+                  this.getNotice();
                 });
             }}
           >标记已读</Button>,
@@ -87,13 +101,19 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
   handleNoticeClear = (title: string, key: string) => {
     const { dispatch } = this.props;
     message.success(`${'清空了'} ${title}`);
-    const clearIds = (this.getNoticeData().key || []).map(item => item.id);
+    const clearIds = (this.getNoticeData().unread || []).map(item => item.id);
 
     if (dispatch) {
       dispatch({
         type: 'global/clearNotices',
         payload: clearIds,
       });
+      // dispatch({
+      //   type: 'global/fetchNotices',
+      //   payload: encodeQueryParam({
+      //     terms: { state: 'unread' }
+      //   })
+      // });
     }
   };
 
@@ -140,7 +160,7 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
       }
 
       if (Array.isArray(value)) {
-        unreadMsg[key] = value.length;
+        // unreadMsg[key] = value.length;
         // console.log(value, value.filter(item => !item.read).length, key, 'value');
         // unreadMsg[key] = value.filter(item => !item.read).length;
         // unreadMsg[key] = value.filter(item => item.state === 'unread').length;
@@ -161,7 +181,7 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
           this.changeReadState(item as NoticeItem);
         }}
         loading={fetchingNotices}
-        clearText="清空"
+        clearText="当前标记为已读"
         viewMoreText="查看更多"
         onClear={this.handleNoticeClear}
         onPopupVisibleChange={onNoticeVisibleChange}
@@ -186,11 +206,11 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
           showViewMore
         />
         <NoticeIcon.Tab
-          tabKey="unread"
-          title="已读消息"
+          tabKey="handle"
+          title="待办消息"
           emptyText="暂无消息"
-          count={unreadMsg.read}
-          list={noticeData.read}
+          count={unreadMsg.handle}
+          list={noticeData.handle}
           showViewMore
         />
 

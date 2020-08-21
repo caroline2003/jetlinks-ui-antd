@@ -3,8 +3,8 @@ import {Avatar, Col, Icon, Row, Spin, Tooltip} from 'antd';
 import {FormattedMessage} from 'umi-plugin-react/locale';
 import numeral from 'numeral';
 import apis from '@/services';
-import Charts from '../Charts';
-import AutoHide from "../Hide/autoHide";
+import Charts from '../../Charts';
+import AutoHide from "../../Hide/autoHide";
 import AlarmImg from "./img/alarm.png";
 import DeviceImg from "./img/device.png";
 import MessagesImg from "./img/messages.png";
@@ -233,7 +233,7 @@ const IntroduceTenant = ({}: {}) => {
                 }}/>
               </Tooltip>
             }
-            total={<AutoHide title={numeral(deviceCount.online).format('0,0')} style={{width: '98%'}}/>}
+            total={<AutoHide title={numeral(deviceCount.onlineCount).format('0,0')} style={{width: '98%'}}/>}
             footer={
               <div style={{whiteSpace: 'nowrap', overflow: 'hidden'}}>
                 <div style={{float: 'left', width: '50%'}}>

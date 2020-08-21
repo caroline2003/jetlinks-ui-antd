@@ -24,6 +24,12 @@ export const routes = [
                         redirect: '/analysis',
 
                     },
+                    // {
+                    //     name: '数据表格',
+                    //     path: '/demo',
+                    //     icon: 'table',
+                    //     component: './demo'
+                    // },
                     {
                         name: '统计分析',
                         path: '/analysis',
@@ -120,7 +126,7 @@ export const routes = [
                         routes: [
                             {
                                 path: '/device/product',
-                                name: '设备产品',
+                                name: '产品',
                                 icon: 'laptop',
                                 iconfont: 'icon-shebei',
                                 tenant: ['admin', 'member'],
@@ -130,7 +136,7 @@ export const routes = [
                             {
                                 hideInMenu: true,
                                 path: '/device/product/save/:id',
-                                name: '设备产品详情',
+                                name: '产品详情',
                                 tenant: ['admin', 'member'],
                                 iconfont: 'icon-shebei',
                                 // authority: ['device-product'],
@@ -139,7 +145,7 @@ export const routes = [
                             {
                                 hideInMenu: true,
                                 path: '/device/product/add',
-                                name: '添加设备产品',
+                                name: '新建产品',
                                 tenant: ['admin', 'member'],
                                 iconfont: 'icon-shebei',
                                 // authority: ['device-product'],
@@ -147,7 +153,7 @@ export const routes = [
                             },
                             {
                                 path: '/device/instance',
-                                name: '设备实例',
+                                name: '设备',
                                 icon: 'desktop',
                                 tenant: ['admin', 'member'],
                                 iconfont: 'icon-shebei1',
@@ -164,7 +170,7 @@ export const routes = [
                             },
                             {
                                 path: '/device/group',
-                                name: '设备分组',
+                                name: '分组',
                                 icon: 'gold',
                                 tenant: ['admin', 'member'],
                                 authority: ['device-group', 'admin'],
@@ -175,14 +181,14 @@ export const routes = [
                             {
                                 hideInMenu: true,
                                 path: '/device/instance/add',
-                                name: '添加设备实例',
+                                name: '添加设备',
                                 tenant: ['admin', 'member'],
                                 iconfont: 'icon-shebeifenzuguanli',
                                 component: './device/instance/editor',
                             },
                             {
                                 path: '/device/gateway',
-                                name: '子设备管理',
+                                name: '网关',
                                 icon: 'global',
                                 tenant: ['admin', 'member'],
                                 iconfont: 'icon-Group',
@@ -193,7 +199,7 @@ export const routes = [
                                 path: '/device/location',
                                 name: '地理位置',
                                 icon: 'compass',
-                                tenant: ['admin', 'member'],
+                                tenant: ['admin'],
                                 authority: ['geo-manager', 'admin'],
                                 version: 'pro',
                                 iconfont: 'icon-diliweizhi',
@@ -223,7 +229,6 @@ export const routes = [
                         path: 'network',
                         name: '设备接入',
                         iconfont: 'icon-shebei',
-                        tenant: ['admin'],
                         icon: 'login',
                         authority: ['certificate', 'network-config', 'device-gateway', 'protocol-supports', 'admin'],
                         routes: [
@@ -231,7 +236,6 @@ export const routes = [
                                 path: '/network/certificate',
                                 name: '证书管理',
                                 icon: 'book',
-                                tenant: ['admin'],
                                 iconfont: 'icon-zhengshuguanli-',
                                 authority: ['certificate', 'admin'],
                                 component: './network/certificate',
@@ -240,7 +244,6 @@ export const routes = [
                                 path: '/network/protocol',
                                 name: '协议管理',
                                 icon: 'wallet',
-                                tenant: ['admin'],
                                 iconfont: 'icon-xieyiguanli',
                                 authority: ['protocol-supports', 'admin'],
                                 component: './device/protocol',
@@ -250,7 +253,6 @@ export const routes = [
                                 name: '网络组件',
                                 icon: 'deployment-unit',
                                 iconfont: 'icon-zujian',
-                                tenant: ['admin'],
                                 authority: ['network-config', 'admin'],
                                 component: './network/type',
                             },
@@ -258,7 +260,6 @@ export const routes = [
                                 path: '/network/gateway',
                                 name: '设备网关',
                                 icon: 'cloud-server',
-                                tenant: ['admin'],
                                 iconfont: 'icon-shebei',
                                 authority: ['device-gateway', 'admin'],
                                 component: './network/gateway',

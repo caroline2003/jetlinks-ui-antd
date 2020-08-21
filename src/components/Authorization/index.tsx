@@ -32,7 +32,7 @@ const Authorization: React.FC<Props> = props => {
     dataAccessVisible: false,
     permissionList: [],
     checkPermission: {},
-    permissionType: 'all',
+    permissionType: props.targetType === 'tenant' ? 'tenant' : 'all',
     searchText: '',
     dimensionList: [],
     targetAutz: [],
@@ -316,14 +316,16 @@ const Authorization: React.FC<Props> = props => {
           <Input.Group compact style={{ marginBottom: '10px' }}>
             <Select
               style={{ width: '15%' }}
-              defaultValue="all"
+              defaultValue={props.targetType === 'tenant' ? 'tenant' : 'all'}
               onChange={(value: string) => setPermissionType(value)}
+              disabled={props.targetType === 'tenant'}
             >
               <Select.Option value="all">全部</Select.Option>
               <Select.Option value="default">默认</Select.Option>
               <Select.Option value="system">系统</Select.Option>
-              <Select.Option value="biz">业务功能</Select.Option>
+              <Select.Option value="business">业务功能</Select.Option>
               <Select.Option value="open-api">OpenAPI</Select.Option>
+              <Select.Option value="tenant">多租户</Select.Option>
             </Select>
             <Input.Search
               style={{ width: '85%' }}
@@ -455,10 +457,10 @@ const Authorization: React.FC<Props> = props => {
               permissionType !== 'all'
                 ? searchText.length > 0
                   ? JSON.parse(JSON.stringify(permissionList))
-                    .filter((item: any) => (item.properties || {}).type === permissionType)
+                    .filter((item: any) => ((item.properties || {}).type || []).includes(permissionType))
                     .filter((item: any) => item.name.indexOf(searchText) > -1)
                   : JSON.parse(JSON.stringify(permissionList)).filter(
-                    (item: any) => (item.properties || {}).type === permissionType,
+                    (item: any) => ((item.properties || {}).type || []).includes(permissionType),
                   )
                 : searchText.length > 0
                   ? JSON.parse(JSON.stringify(permissionList)).filter(
